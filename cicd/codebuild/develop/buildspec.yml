@@ -1,0 +1,29 @@
+version: 0.2
+run-as: root
+
+phases:
+  pre_build:
+    commands:
+      - echo AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+      - echo AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+      - echo IMAGE_REPO_NAME=$IMAGE_REPO_NAME
+      - echo S3_DEPLOY_BUCKET_NAME=$S3_DEPLOY_BUCKET_NAME
+      - echo CODEBUILD_RESOLVED_SOURCE_VERSION_$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo DISTRIBUTION-ID=$DISTRIBUTION_ID
+      - YEAR_MONTH=$(date +"%Y%m")
+      - NOW=$year_month$(date +"%d")
+      - FILENAME=front_deploy_$now_$CODEBUILD_RESOLVED_SOURCE_VERSION.zip
+      - echo FILENAME=$FILENAME
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo load env
+      - aws s3 cp s3://$S3_LOTTO_DOTENV_BUCKET_NAME/lotto-service/.env.develop .env
+      - cat .env
+      - npm run build
+      - echo backup file
+      - zip -r $filename out/
+      - aws s3 cp $filename s3://S3_DEPLOY_BUCKET_NAME/backup/$YEAR_MONTH/$FILENAME
+      - echo deploy files
+      - aws s3 cp out/ s3://$S3_DEPLOY_BUCKET_NAME --recursive
+      - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID  --path "/*"
