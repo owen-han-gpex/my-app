@@ -11,7 +11,7 @@ phases:
       - echo CODEBUILD_RESOLVED_SOURCE_VERSION_$CODEBUILD_RESOLVED_SOURCE_VERSION
       - echo DISTRIBUTION-ID=$DISTRIBUTION_ID
       - YEAR_MONTH=$(date +"%Y%m")
-      - NOW=$year_month$(date +"%d")
+      - NOW=$YEAR_MONTH$(date +"%d")
       - FILENAME=front_deploy_$now_$CODEBUILD_RESOLVED_SOURCE_VERSION.zip
       - echo FILENAME=$FILENAME
   build:
