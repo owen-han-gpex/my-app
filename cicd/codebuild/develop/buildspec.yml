@@ -4,13 +4,12 @@ run-as: root
 phases:
   install:
     runtime-versions:
-      nodejs: 18.x
+      nodejs: 18
   pre_build:
     commands:
       - echo AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-      - echo AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
       - echo S3_DEPLOY_BUCKET_NAME=$S3_DEPLOY_BUCKET_NAME
-      - echo CODEBUILD_RESOLVED_SOURCE_VERSION_$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo CODEBUILD_RESOLVED_SOURCE_VERSION=$CODEBUILD_RESOLVED_SOURCE_VERSION
       - echo DISTRIBUTION_ID=$DISTRIBUTION_ID
       - YEAR_MONTH=$(date +"%Y%m")
       - NOW=$YEAR_MONTH$(date +"%d")
@@ -20,8 +19,9 @@ phases:
     commands:
       - echo Build started on `date`
       - echo load env
-      - aws s3 cp s3://$S3_LOTTO_DOTENV_BUCKET_NAME/lotto-service/.env.develop .env
+      - aws s3 cp s3://$S3_LOTTO_DOTENV_BUCKET_NAME/front-test/.env.develop .env
       - cat .env
+      - npm ci
       - npm run build
       - echo backup file
       - zip -r $filename out/
