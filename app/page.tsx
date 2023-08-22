@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <p>0822-1107</p>
+        <p>0822-13:48</p>
         <p>
           Hello World Get started by editing&nbsp;
           <code className={styles.code}>app/page.tsx</code>
