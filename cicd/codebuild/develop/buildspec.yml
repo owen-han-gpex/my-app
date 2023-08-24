@@ -27,5 +27,5 @@ phases:
       - zip -r $FILENAME out/
       - aws s3 cp $FILENAME s3://$S3_DEPLOY_BUCKET_NAME/backup/$YEAR_MONTH/
       - echo deploy files
-      - aws s3 cp out/ s3://$S3_DEPLOY_BUCKET_NAME --recursive
+      - aws s3 sync out/ s3://$S3_DEPLOY_BUCKET_NAME  --exclude "backup*" --delete
       - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID  --path "/*"
